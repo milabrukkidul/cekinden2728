@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek PPDB INDEN MI.Labkid</title>
+    <style>
+        :root {
+            --primary-color: #046c4e; /* Tema hijau madrasah */
+            --primary-light: #def7ec;
+            --text-color: #374151;
+            --text-muted: #6b7280;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px 15px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header Tema Menarik dengan Gradasi Hijau */
+        .header {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #046c4e 0%, #059669 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(4, 108, 78, 0.2);
+        }
+
+        /* Efek logo: Light Sweep khusus untuk PNG transparan */
+        .logo-container {
+            position: relative;
+            width: 85px;
+            height: auto;
+            margin-right: 25px;
+            flex-shrink: 0;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+        }
+
+        .logo-base {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .logo-sweep {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Mencerahkan duplikat maskot untuk efek cahaya */
+            filter: brightness(1.8) contrast(1.1);
+            /* Menggunakan clip-path yang berbentuk miring untuk menyapu gambar */
+            clip-path: polygon(-30% 0, -15% 0, -30% 100%, -45% 100%);
+            /* Animasi total 6.5s: 1.5s efek jalan + 5s jeda */
+            animation: sweep-mask 6.5s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sweep-mask {
+            0% { clip-path: polygon(-30% 0, -15% 0, -30% 100%, -45% 100%); }
+            23% { clip-path: polygon(115% 0, 130% 0, 100% 100%, 85% 100%); }
+            100% { clip-path: polygon(115% 0, 130% 0, 100% 100%, 85% 100%); } /* Jeda 5 detik sebelum diulang */
+        }
+
+        .header h1 {
+            font-size: 26px;
+            margin: 0;
+            line-height: 1.3;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            padding: 18px 25px;
+            background-color: #f9fafb;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 16px;
+            color: #111827;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Wadah tabel dengan scroll dan max-height untuk sticky header */
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate; 
+            border-spacing: 0;
+            text-align: left;
+            min-width: 900px;
+        }
+
+        /* Tabel atas dibekukan (Sticky Header) */
+        th {
+            position: sticky;
+            top: 0;
+            background-color: #f9fafb;
+            z-index: 10;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Warna selang-seling (zebra striping) */
+        tbody tr:nth-child(even) td {
+            background-color: #f8fbf9; /* Hijau yang sangat transparan/lembut */
+        }
+
+        /* Efek saat kursor disorot */
+        tbody tr:hover td {
+            background-color: #eef8f3 !important; /* Hijau pastel yang sedikit lebih tebal */
+            transition: background-color 0.2s ease;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 9999px;
+            letter-spacing: 0.3px;
+        }
+
+        .status-terima {
+            color: #03543f;
+            background-color: #def7ec;
+            border: 1px solid #84e1bc;
+        }
+
+        .status-tunggu {
+            color: #723b13;
+            background-color: #fdf6b2;
+            border: 1px solid #faca15;
+        }
+
+        .status-tolak {
+            color: #9b1c1c;
+            background-color: #fde8e8;
+            border: 1px solid #f8b4b4;
+        }
+
+        .status-default {
+            color: #4b5563;
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Error Message */
+        .error {
+            color: #9b1c1c;
+            padding: 25px;
+            text-align: center;
+            background-color: #fde8e8;
+            margin: 20px;
+            border-radius: 8px;
+            border: 1px solid #f8b4b4;
+        }
+
+        /* Loading Layout */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Dari Uiverse.io by Nawsome */
+        .pl {
+            width: 6em;
+            height: 6em;
+        }
+
+        .pl__ring {
+            animation: ringA 2s linear infinite;
+        }
+
+        .pl__ring--a {
+            stroke: #f42f25;
+        }
+
+        .pl__ring--b {
+            animation-name: ringB;
+            stroke: #f49725;
+        }
+
+        .pl__ring--c {
+            animation-name: ringC;
+            stroke: #255ff4;
+        }
+
+        .pl__ring--d {
+            animation-name: ringD;
+            stroke: #f42582;
+        }
+
+        /* Animations untuk Spinner Uiverse */
+        @keyframes ringA {
+            from, 4% { stroke-dasharray: 0 660; stroke-width: 20; stroke-dashoffset: -330; }
+            12% { stroke-dasharray: 60 600; stroke-width: 30; stroke-dashoffset: -335; }
+            32% { stroke-dasharray: 60 600; stroke-width: 30; stroke-dashoffset: -595; }
+            40%, 54% { stroke-dasharray: 0 660; stroke-width: 20; stroke-dashoffset: -660; }
+            62% { stroke-dasharray: 60 600; stroke-width: 30; stroke-dashoffset: -665; }
+            82% { stroke-dasharray: 60 600; stroke-width: 30; stroke-dashoffset: -925; }
+            90%, to { stroke-dasharray: 0 660; stroke-width: 20; stroke-dashoffset: -990; }
+        }
+
+        @keyframes ringB {
+            from, 12% { stroke-dasharray: 0 220; stroke-width: 20; stroke-dashoffset: -110; }
+            20% { stroke-dasharray: 20 200; stroke-width: 30; stroke-dashoffset: -115; }
+            40% { stroke-dasharray: 20 200; stroke-width: 30; stroke-dashoffset: -195; }
+            48%, 62% { stroke-dasharray: 0 220; stroke-width: 20; stroke-dashoffset: -220; }
+            70% { stroke-dasharray: 20 200; stroke-width: 30; stroke-dashoffset: -225; }
+            90% { stroke-dasharray: 20 200; stroke-width: 30; stroke-dashoffset: -305; }
+            98%, to { stroke-dasharray: 0 220; stroke-width: 20; stroke-dashoffset: -330; }
+        }
+
+        @keyframes ringC {
+            from { stroke-dasharray: 0 440; stroke-width: 20; stroke-dashoffset: 0; }
+            8% { stroke-dasharray: 40 400; stroke-width: 30; stroke-dashoffset: -5; }
+            28% { stroke-dasharray: 40 400; stroke-width: 30; stroke-dashoffset: -175; }
+            36%, 58% { stroke-dasharray: 0 440; stroke-width: 20; stroke-dashoffset: -220; }
+            66% { stroke-dasharray: 40 400; stroke-width: 30; stroke-dashoffset: -225; }
+            86% { stroke-dasharray: 40 400; stroke-width: 30; stroke-dashoffset: -395; }
+            94%, to { stroke-dasharray: 0 440; stroke-width: 20; stroke-dashoffset: -440; }
+        }
+
+        @keyframes ringD {
+            from, 8% { stroke-dasharray: 0 440; stroke-width: 20; stroke-dashoffset: 0; }
+            16% { stroke-dasharray: 40 400; stroke-width: 30; stroke-dashoffset: -5; }
+            36% { stroke-dasharray: 40 400; stroke-width: 30; stroke-dashoffset: -175; }
+            44%, 50% { stroke-dasharray: 0 440; stroke-width: 20; stroke-dashoffset: -220; }
+            58% { stroke-dasharray: 40 400; stroke-width: 30; stroke-dashoffset: -225; }
+            78% { stroke-dasharray: 40 400; stroke-width: 30; stroke-dashoffset: -395; }
+            86%, to { stroke-dasharray: 0 440; stroke-width: 20; stroke-dashoffset: -440; }
+        }
+
+        /* Responsive styling */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            .header img {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo-container">
+            <img src="https://i.ibb.co.com/nMLdXF00/maskot-adik-nuris-3d.png" class="logo-base" alt="Logo MI Nurul Islam">
+            <img src="https://i.ibb.co.com/nMLdXF00/maskot-adik-nuris-3d.png" class="logo-sweep" alt="">
+        </div>
+        <h1>
+            Cek Penerimaan PPDB Jalur Inden<br>
+            MI Nurul Islam Labruk Kidul TP.2027/2028
+        </h1>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span>Daftar Calon Peserta Didik</span>
+            <span id="totalDataCount" style="font-size: 13px; color: var(--text-muted); font-weight: normal;"></span>
+        </div>
+        
+        <!-- Loading Animation Baru -->
+        <div id="loading" class="loading-container">
+            <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+                <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+                <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#000" stroke-width="20" stroke-dasharray="0 440" stroke-linecap="round"></circle>
+            </svg>
+            <div style="margin-top: 20px; font-weight: 600;">Memuat data...</div>
+        </div>
+        
+        <div id="error" class="error" style="display: none;"></div>
+        
+        <div class="table-container">
+            <table id="dataTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>No Pendaftaran</th>
+                        <th>Nama Siswa</th>
+                        <th>Tggl Lahir</th>
+                        <th>Umur</th>
+                        <th>Asal TK/RA</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxVuLD2IKSWsB9DTX09y_RpbTNJkzqwV2vkZo5haYK6QJ6DwkFAiO7wYHZ4DfnnKD4xWA/exec';
+    
+    async function fetchData() {
+        const loading = document.getElementById('loading');
+        const errorDiv = document.getElementById('error');
+        const table = document.getElementById('dataTable');
+        const tbody = document.getElementById('tableBody');
+
+        try {
+            const response = await fetch(API_URL);
+            
+            if (!response.ok) {
+                throw new Error('Gagal mengambil data. Status: ' + response.status);
+            }
+            
+            let responseData;
+            try {
+                responseData = await response.json();
+            } catch (e) {
+                throw new Error('Response API tidak valid. Pastikan Script Google sudah di-deploy dengan benar.');
+            }
+
+            if (responseData.status === 'error') {
+                throw new Error(responseData.message || 'Terjadi kesalahan pada Spreadsheet.');
+            }
+
+            const allData = responseData.data || [];
+            
+            loading.style.display = 'none';
+            
+            if (allData.length === 0) {
+                errorDiv.style.display = 'block';
+                errorDiv.style.backgroundColor = '#f9fafb';
+                errorDiv.style.borderColor = '#e5e7eb';
+                errorDiv.style.color = '#4b5563';
+                errorDiv.textContent = 'Belum ada data pendaftaran.';
+                return;
+            }
+
+            // Tampilkan tabel jika ada data
+            table.style.display = 'table';
+            document.getElementById('totalDataCount').textContent = `Total: ${allData.length} Data`;
+            
+            // Render semua data langsung (tanpa pagination)
+            allData.forEach(row => {
+                const tr = document.createElement('tr');
+                
+                const getVal = (keyContains) => {
+                    const key = Object.keys(row).find(k => k.toLowerCase().includes(keyContains.toLowerCase()));
+                    return key && row[key] !== undefined && row[key] !== null ? row[key] : '-';
+                };
+
+                const timestamp = getVal('Timestamp');
+                const noDaftar = getVal('No Pendaftaran') !== '-' ? getVal('No Pendaftaran') : getVal('No');
+                const nama = getVal('Nama');
+                const tglLahir = getVal('Tggl Lahir') !== '-' ? getVal('Tggl Lahir') : getVal('Tanggal Lahir');
+                const umur = getVal('Umur');
+                const asal = getVal('Asal TK') !== '-' ? getVal('Asal TK') : (getVal('Asal RA') !== '-' ? getVal('Asal RA') : getVal('Asal'));
+                const status = getVal('Status');
+
+                let statusHtml = status;
+                let s = String(status).toLowerCase();
+                
+                if (s.includes('terima') || s.includes('lulus') || s.includes('diterima')) {
+                    statusHtml = `<span class="status-badge status-terima">${status}</span>`;
+                } else if (s.includes('tunggu') || s.includes('proses') || s.includes('cadangan')) {
+                    statusHtml = `<span class="status-badge status-tunggu">${status}</span>`;
+                } else if (s.includes('tolak') || s.includes('gagal') || s.includes('tidak')) {
+                    statusHtml = `<span class="status-badge status-tolak">${status}</span>`;
+                } else if (status !== '-') {
+                    statusHtml = `<span class="status-badge status-default">${status}</span>`;
+                }
+
+                tr.innerHTML = `
+                    <td>${timestamp}</td>
+                    <td style="font-family: monospace; font-size: 14px; font-weight: 500;">${noDaftar}</td>
+                    <td style="font-weight: 600; color: #111827;">${nama}</td>
+                    <td>${tglLahir}</td>
+                    <td>${umur}</td>
+                    <td>${asal}</td>
+                    <td>${statusHtml}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        } catch (error) {
+            loading.style.display = 'none';
+            errorDiv.style.display = 'block';
+            errorDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchData);
+</script>
+
+</body>
+</html>
