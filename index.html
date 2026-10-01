@@ -416,7 +416,7 @@
                 let statusHtml = status;
                 let s = String(status).toLowerCase();
                 
-                if (s.includes('terima') || s.includes('lulus') || s.includes('diterima')) {
+                if (s.includes('terima') || s.includes('lulus') || s.includes('lolos-umur')) {
                     statusHtml = `<span class="status-badge status-terima">${status}</span>`;
                 } else if (s.includes('tunggu') || s.includes('proses') || s.includes('cadangan')) {
                     statusHtml = `<span class="status-badge status-tunggu">${status}</span>`;
